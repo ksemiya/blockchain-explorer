@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import BlockchainPage from '../pages/Blockchain.vue'
 import BlockPage from '../pages/Block.vue'
 import TransactionPage from '../pages/Transaction.vue'
+import CheckPage from '../pages/Check.vue'
 
 Vue.use(Router)
 
@@ -23,6 +24,12 @@ export default new Router({
       path: '/transaction/:hash',
       name: 'transaction',
       component: TransactionPage,
+      props: true
+    },
+    {
+      path: '/check/:hash',
+      name: 'check',
+      component: CheckPage,
       props: true
     }
   ]
