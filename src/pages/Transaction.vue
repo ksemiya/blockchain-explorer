@@ -67,9 +67,17 @@
       <ul class="list-group list-group-flush">
         <li v-if="content" class="list-group-item">
           <div class="row">
-            <div class="col-sm-3"><strong>Serialized:</strong></div>
+            <div class="col-sm-3"><strong>Method:</strong></div>
             <div class="col-sm-9">
-              <code>{{ content }}</code>
+              <code>{{ method }}</code>
+            </div>
+          </div>
+        </li>
+        <li v-if="content" class="list-group-item">
+          <div class="row">
+            <div class="col-sm-3"><strong>Deserialized:</strong></div>
+            <div class="col-sm-9">
+              <pre>{{ deserializedContent }}</pre>
             </div>
           </div>
         </li>
@@ -79,6 +87,9 @@
 </template>
 
 <script>
+  // Import the generated protobuf modules
+  import { decodeTransaction, getNameById } from '../decoding/decode';
+
   module.exports = {
     props: {
       hash: String
@@ -89,22 +100,28 @@
         location: {},
         type: '',
         status: {},
-        time: ''
-      }
+        time: '',
+        deserializedContent: {},
+        method: {},
+      };
     },
     methods: {
+
       loadTransaction: function() {
         const self = this;
-
         this.$http.get('/public/api/explorer/v1/transactions?hash=' + this.hash).then(response => {
+          var object = decodeTransaction(response)
+          self.deserializedContent = JSON.stringify(object, null, 2);
+          self.method = getNameById(object.payload.anyTx.callInfo.methodId);
+          // Update the Vue component data properties
           self.content = response.data.message;
           self.location = response.data.location;
           self.type = response.data.type;
           self.status = response.data.status;
           self.time = response.data.time;
-        }).catch(error => {
-          console.error(error)
-        })
+        }) //.catch(error => {
+          //console.error(error)
+        //})
       }
     },
     mounted: function() {
