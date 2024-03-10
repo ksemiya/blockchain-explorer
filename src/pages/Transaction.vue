@@ -111,8 +111,14 @@
         const self = this;
         this.$http.get('/public/api/explorer/v1/transactions?hash=' + this.hash).then(response => {
           var object = decodeTransaction(response)
-          self.deserializedContent = JSON.stringify(object, null, 2);
-          self.method = getNameById(object.payload.anyTx.callInfo.methodId);
+          if (object) {
+            self.deserializedContent = JSON.stringify(object, null, 2);
+            self.method = getNameById(object.payload.anyTx.callInfo.methodId);
+          } else {
+            self.deserializedContent = response.data.message;
+            self.method = '';
+          };
+          // self.method = getNameById(object.payload.anyTx.callInfo.methodId);
           // Update the Vue component data properties
           self.content = response.data.message;
           self.location = response.data.location;
