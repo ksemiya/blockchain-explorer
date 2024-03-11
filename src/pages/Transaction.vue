@@ -133,9 +133,9 @@
           self.type = response.data.type;
           self.status = response.data.status;
           self.time = response.data.time;
-        }) //.catch(error => {
-          //console.error(error)
-        //})
+        }).catch(error => {
+          console.error(error)
+        })
       }
     },
     mounted: function() {
