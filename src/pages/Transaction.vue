@@ -110,7 +110,15 @@
       loadTransaction: function() {
         const self = this;
         this.$http.get('/public/api/explorer/v1/transactions?hash=' + this.hash).then(response => {
-          var object = decodeTransaction(response)
+          var object;
+          try {
+            // Attempt to decode the transaction
+            object = decodeTransaction(response);
+          } catch (error) {
+            // Handle any errors that occur during the decode process
+            console.error("An error occurred during transaction decoding:", error);
+            object = null;
+          }
           if (object) {
             self.deserializedContent = JSON.stringify(object, null, 2);
             self.method = getNameById(object.payload.anyTx.callInfo.methodId);
