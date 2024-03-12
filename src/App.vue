@@ -6,6 +6,9 @@
           <img src="images/logo.png" width="41" height="36" class="d-inline-block" alt="">
           Blockchain Explorer
         </router-link>
+        <form class="form-inline" @submit.prevent="goToCheckTransaction">
+          <button type="submit" class="btn btn-primary">Проверить голос</button>
+        </form>
         <form class="form-inline" @submit.prevent="search">
           <input v-model="query" class="form-control mr-sm-2" type="search" placeholder="Block height or tx hash" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -51,6 +54,9 @@
         } else if (!isNaN(parseInt(this.query))) {
           this.$router.push({ name: 'block', params: { height: this.query } })
         }
+      },
+      goToCheckTransaction: function() {
+        this.$router.push({ name: 'check' })
       }
     }
   }

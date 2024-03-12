@@ -27,7 +27,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/check/:hash',
+      path: '/check/',
       name: 'check',
       component: CheckPage,
       props: true
