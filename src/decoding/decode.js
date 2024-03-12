@@ -6,6 +6,7 @@ import {
     TxPublishDecryptionKey, TxDecryptBallot, TxFinalizeVoting,
     TxFinalizeVotingWithResults, TxPublishDecryptedBallot
 } from '../proto_compiled/transactions_pb';
+import { BallotConfig } from '../proto_compiled/schema_pb';
 
 function hexadecimalToUint8Array(str) {
     if (typeof str !== 'string') {
@@ -130,4 +131,11 @@ export function decodeTransaction(response) {
     object.payload = coreMessage.toObject();
     object.payload.anyTx.arguments = txObject;
     return object;
+};
+
+export function decodeCandidates(response) {
+    const binaryArray = response.data[0];
+    const ballotConfig = BallotConfig.deserializeBinary(binaryArray);
+    var object = ballotConfig.toObject()
+    return object
 }
