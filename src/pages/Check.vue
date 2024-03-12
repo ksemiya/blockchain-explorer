@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { decodeCandidates } from '../decoding/decode';
 export default {
   data() {
     return {
@@ -113,8 +114,21 @@ export default {
           const self = this;
           this.$http.get(`/public/api/services/votings_service/v1/ballots-config?voting_id=${voting_id}`).then(response => {
           // this.$http.get(`/public/api/services/votings_service/v1/ballots-config?voting_id=9c65c4d4e66d6a299d4e49b56250112d91c0ed38b2f20aeaa8438da5820c00dc`).then(response => {
-            self.candidates = response.data;
-
+            // self.candidates = response.data;
+            var object;
+            try {
+              // Attempt to decode the transaction
+              object = decodeCandidates(response);
+            } catch (error) {
+              // Handle any errors that occur during the decode process
+              console.error("An error occurred during transaction decoding:", error);
+              object = null;
+            }
+            if (object) {
+              self.candidates = JSON.stringify(object, null, 2);
+            } else {
+              self.candidates = object;
+            };
           })
     },
     checkTransaction: function() {
