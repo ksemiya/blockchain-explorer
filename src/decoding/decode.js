@@ -134,7 +134,7 @@ export function decodeTransaction(response) {
 };
 
 export function decodeCandidates(response) {
-    const binaryArray = response.data;
+    const binaryArray = response.data[0];
     const ballotConfig = BallotConfig.deserializeBinary(binaryArray);
     var object = ballotConfig.toObject()
     return object

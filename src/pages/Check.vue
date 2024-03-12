@@ -9,7 +9,7 @@
             <div class="row">
               <div class="col-sm-3"><strong>Candidates:</strong></div>
               <div class="col-sm-9">
-                <code>{{ candidates }}</code>
+                <pre>{{ candidates }}</pre>
               </div>
             </div>
           </li>
