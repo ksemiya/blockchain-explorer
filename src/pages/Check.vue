@@ -1,5 +1,21 @@
 <template>
   <div>
+    <div v-if="candidates">
+      <div class="card">
+        <div class="card-header">Candidates</div>
+        <ul class="list-group list-group-flush">
+
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3"><strong>Candidates:</strong></div>
+              <div class="col-sm-9">
+                <code>{{ candidates }}</code>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div> 
     <div>
       <form class="form-inline" @submit.prevent="checkTransaction">
         <input v-model="inputValue" type="text" placeholder="Введите SID" class="form-control">
@@ -79,12 +95,27 @@ export default {
       status: {},
       linkDecryptTxHash: '',
       linkStoreTxHash: '',
-    };
+      candidates: {},
+    };    
+  },
+    mounted: function() {
+        this.$nextTick(function() {
+          this.loadCandidates()
+        })
   },
   methods: {
     logInputValue() {
       // This method logs the current value of the text field to the console
-      console.log(this.inputValue);
+      console.log(this.inputValue);      
+    },
+      loadCandidates: function() {
+          const voting_id = '9c65c4d4e66d6a299d4e49b56250112d91c0ed38b2f20aeaa8438da5820c00dc'; // Replace with your actual voting_id
+          const self = this;
+          this.$http.get(`/public/api/services/votings_service/v1/ballots-config?voting_id=${voting_id}`).then(response => {
+          // this.$http.get(`/public/api/services/votings_service/v1/ballots-config?voting_id=9c65c4d4e66d6a299d4e49b56250112d91c0ed38b2f20aeaa8438da5820c00dc`).then(response => {
+            self.candidates = response.data;
+
+          })
     },
     checkTransaction: function() {
       const self = this;
