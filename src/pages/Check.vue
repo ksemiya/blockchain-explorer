@@ -97,6 +97,7 @@ export default {
       linkDecryptTxHash: '',
       linkStoreTxHash: '',
       candidates: {},
+      candidatesJSON: {},
     };    
   },
     mounted: function() {
@@ -125,6 +126,7 @@ export default {
               object = null;
             }
             if (object) {
+              self.candidatesJSON = object;
               self.candidates = JSON.stringify(object, null, 2);
             } else {
               self.candidates = object;
@@ -138,11 +140,15 @@ export default {
 
       this.$http.get(`/public/api/services/votings_service/v1/ballot-by-sid?voting_id=${voting_id}&sid=${sid}`).then(response => {
         const baseURL = '/#/transaction/';
+        
+        const candidateNum = response.data.decrypted_choices[0];
+        const foundOption = this.candidatesJSON.optionsMap.find(option => option[0] === candidateNum)
+        const candidateStr = foundOption ? foundOption[1] : undefined
 
         self.districtId = response.data.district_id;
         self.decryptTxHash = response.data.decrypt_tx_hash;
         self.storeTxHash = response.data.store_tx_hash;
-        self.decryptedChoices = response.data.decrypted_choices;
+        self.decryptedChoices = candidateStr;
         self.status = response.data.status;
 
         self.linkDecryptTxHash = `${baseURL}${encodeURIComponent(self.decryptTxHash)}`
